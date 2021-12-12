@@ -5,6 +5,7 @@ import urllib.request
 import uuid
 import urllib
 from dotenv import load_dotenv
+import telegram
 
 load_dotenv()
 
@@ -50,3 +51,9 @@ for name in nasa_epic:
     image_name = nasa_epic_image(name)
     url_epic_image_nasa = f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png?api_key={api_key}'
     image_save(url_epic_image_nasa, images_path_nasa)
+
+bot = telegram.Bot(token='5053046789:AAFYgBv0puCAOBY9hTPtYordwbHrhPduZEM')
+print(bot.get_me())
+updates = bot.get_updates()
+print(updates[0])
+bot.send_message(chat_id='@NASA_PHOTO', text="I'm sorry Dave I'm afraid I can't do that.")
