@@ -19,6 +19,7 @@ lib64/
 parts/
 sdist/
 var/
+
 wheels/
 *.egg-info/
 .installed.cfg
@@ -104,6 +105,8 @@ venv.bak/
 
 # mkdocs documentation
 /site
+/image_nasa
+/.idea
 
 # mypy
 .mypy_cache/
