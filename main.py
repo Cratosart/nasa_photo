@@ -56,4 +56,7 @@ bot = telegram.Bot(token='5053046789:AAFYgBv0puCAOBY9hTPtYordwbHrhPduZEM')
 print(bot.get_me())
 updates = bot.get_updates()
 print(updates[0])
-bot.send_message(chat_id='@NASA_PHOTO', text="I'm sorry Dave I'm afraid I can't do that.")
+bot.send_message(chat_id='@NASA_PHOTO',
+                 text="I'm sorry Dave I'm afraid I can't do that.")
+bot.send_document(chat_id='@NASA_PHOTO',
+                  document=open(f'./images_nasa/0c6aa032-7367-4377-8132-9cc9c1806b82.png', 'rb'))
