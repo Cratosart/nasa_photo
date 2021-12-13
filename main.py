@@ -20,7 +20,7 @@ from os import listdir
 
 
 
-def createParser ():
+def createparser ():
     parser = argparse.ArgumentParser()
     parser.add_argument ('time', nargs='?', default=86400)
     return parser
