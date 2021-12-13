@@ -53,9 +53,11 @@ if __name__ == '__main__':
     api_key_nasa = os.environ['API_KEY_NASA']
     api_key_telegram = os.environ['API_KEY_TELEGRAM']
     chat_id = os.environ['CHAT_ID_TELEGRAM']
+
     images_path_nasa = 'images_nasa'
-    if not os.path.exists(images_path_nasa):
-        os.mkdir(images_path_nasa)
+    os.makedirs(images_path_nasa)
+    # if not os.path.exists(images_path_nasa):
+    #     os.mkdir(images_path_nasa)
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural?api_key=cz0rECf7cwW5n90a51pe01jDNPuPAlgM9Wtp0KWa'
 
