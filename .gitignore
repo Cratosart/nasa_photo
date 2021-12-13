@@ -20,6 +20,8 @@ parts/
 sdist/
 var/
 /images_nasa
+/Pipfile
+/Pipfile.lock
 
 wheels/
 *.egg-info/
