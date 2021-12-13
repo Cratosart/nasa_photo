@@ -70,9 +70,9 @@ if __name__ == '__main__':
     namespace = parser.parse_args()
     sleep_time = namespace.time
 
-    mypath = "./images_nasa"
-    for image in listdir(mypath):
-        if isfile(joinpath(mypath, image)):
+    path = "./images_nasa"
+    for image in listdir(path):
+        if isfile(joinpath(path, image)):
             bot = telegram.Bot(token=f'{api_key_telegram}')
             time.sleep(sleep_time)
             bot.send_document(chat_id='@NASA_PHOTO',
