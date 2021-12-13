@@ -10,29 +10,26 @@ import telegram
 import time
 import argparse
 
-
 from os.path import isfile
 from os.path import join as joinpath
 from dotenv import load_dotenv
 from os import listdir
 
 
-
-
-
-def createparser ():
+def createparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument ('time', nargs='?', default=86400)
+    parser.add_argument('time', nargs='?', default=86400)
     return parser
 
-def nasa_epic_requests(url):
+
+def create_nasa_epic_requests(url):
     payload = {}
     headers = {}
     response = requests.request("GET", url_epic_nasa, headers=headers, data=payload)
     return response
 
 
-def nasa_epic_date(nasa_epic):
+def formatting_nasa_epic_date(nasa_epic):
     for key, value in nasa_epic.items():
         if key == "date":
             value = datetime.datetime.fromisoformat(value)
@@ -40,16 +37,17 @@ def nasa_epic_date(nasa_epic):
             return date_image
 
 
-def nasa_epic_image(nasa_epic):
+def getting_nasa_epic_image(nasa_epic):
     for key, value in nasa_epic.items():
         if key == "image":
             image_name = value
             return image_name
 
 
-def image_save(url, path_save):
+def save_image(url, path_save):
     filename = str(uuid.uuid4())
     urllib.request.urlretrieve(url, f'./{path_save}/{filename}.png')
+
 
 if __name__ == '__main__':
     load_dotenv()
@@ -61,23 +59,20 @@ if __name__ == '__main__':
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural?api_key=cz0rECf7cwW5n90a51pe01jDNPuPAlgM9Wtp0KWa'
 
-    nasa_epic = nasa_epic_requests(url_epic_nasa).json()
+    nasa_epic = create_nasa_epic_requests(url_epic_nasa).json()
     for name in nasa_epic:
-        image_date = nasa_epic_date(name)
-        image_name = nasa_epic_image(name)
+        image_date = formatting_nasa_epic_date(name)
+        image_name = getting_nasa_epic_image(name)
         url_epic_image_nasa = f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png?api_key={api_key_nasa}'
-        image_save(url_epic_image_nasa, images_path_nasa)
+        save_image(url_epic_image_nasa, images_path_nasa)
 
-
-    parser = createParser()
+    parser = createparser()
     namespace = parser.parse_args(sys.argv[1:])
     sleep_time = namespace.time
 
     mypath = "./images_nasa"
     for image in listdir(mypath):
-        if isfile(joinpath(mypath,image)):
-
-
+        if isfile(joinpath(mypath, image)):
             bot = telegram.Bot(token=f'{api_key_telegram}')
             time.sleep(sleep_time)
             bot.send_document(chat_id='@NASA_PHOTO',
