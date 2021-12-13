@@ -1,5 +1,4 @@
 import sys
-
 import requests
 import os
 import datetime
@@ -64,7 +63,7 @@ if __name__ == '__main__':
     for name in nasa_epic:
         image_date = formatting_nasa_epic_date(name)
         image_name = getting_nasa_epic_image(name)
-        url_epic_image_nasa = f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png?api_key={api_key_nasa}'
+        url_epic_image_nasa = f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png?api_key={api_key_nasa} '
         save_image(url_epic_image_nasa, images_path_nasa)
 
     parser = createparser()
@@ -76,5 +75,7 @@ if __name__ == '__main__':
         if isfile(joinpath(path, image)):
             bot = telegram.Bot(token=api_key_telegram)
             time.sleep(sleep_time)
-            bot.send_document(chat_id=chat_id,
-                              document=open(f'./images_nasa/{image}', 'rb'))
+            with open(f'./images_nasa/{image}', 'rb') as file:
+                bot.send_document(chat_id=chat_id,document=file)
+            # bot.send_document(chat_id=chat_id,
+            #                   document=open(f'./images_nasa/{image}', 'rb'),close=close(f'./images_nasa/{image}'))
