@@ -16,7 +16,6 @@ from os.path import join as joinpath
 from dotenv import load_dotenv
 from os import listdir
 
-load_dotenv()
 
 api_key_nasa = os.environ['API_KEY_NASA']
 api_key_telegram = os.environ['API_KEY_TELEGRAM']
@@ -54,6 +53,7 @@ def image_save(url, path_save):
     urllib.request.urlretrieve(url, f'./{path_save}/{filename}.png')
 
 if __name__ == '__main__':
+    load_dotenv()
     images_path_nasa = 'images_nasa'
     if not os.path.exists(images_path_nasa):
         os.mkdir(images_path_nasa)
