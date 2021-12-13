@@ -67,7 +67,7 @@ if __name__ == '__main__':
         save_image(url_epic_image_nasa, images_path_nasa)
 
     parser = createparser()
-    namespace = parser.parse_args(sys.argv[1:])
+    namespace = parser.parse_args()
     sleep_time = namespace.time
 
     mypath = "./images_nasa"
