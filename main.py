@@ -17,8 +17,7 @@ from dotenv import load_dotenv
 from os import listdir
 
 
-api_key_nasa = os.environ['API_KEY_NASA']
-api_key_telegram = os.environ['API_KEY_TELEGRAM']
+
 
 
 def createParser ():
@@ -54,6 +53,8 @@ def image_save(url, path_save):
 
 if __name__ == '__main__':
     load_dotenv()
+    api_key_nasa = os.environ['API_KEY_NASA']
+    api_key_telegram = os.environ['API_KEY_TELEGRAM']
     images_path_nasa = 'images_nasa'
     if not os.path.exists(images_path_nasa):
         os.mkdir(images_path_nasa)
