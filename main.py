@@ -18,7 +18,7 @@ from os import listdir
 
 def createparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('time', nargs='?', default=86400)
+    parser.add_argument('time', nargs='?', default=10)
     return parser
 
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     path = "./images_nasa"
     for image in listdir(path):
         if isfile(joinpath(path, image)):
-            bot = telegram.Bot(token=f'{api_key_telegram}')
+            bot = telegram.Bot(token=api_key_telegram)
             time.sleep(sleep_time)
             bot.send_document(chat_id='@NASA_PHOTO',
                               document=open(f'./images_nasa/{image}', 'rb'))
