@@ -55,7 +55,7 @@ if __name__ == '__main__':
     chat_id = os.environ['CHAT_ID_TELEGRAM']
 
     images_path_nasa = 'images_nasa'
-    os.makedirs(images_path_nasa)
+    os.makedirs(images_path_nasa, exist_ok=True)
     # if not os.path.exists(images_path_nasa):
     #     os.mkdir(images_path_nasa)
 
