@@ -21,10 +21,10 @@ def createparser():
     return parser
 
 
-def create_nasa_epic_requests(url):
-    payload = {}
-    headers = {}
-    response = requests.request("GET", url_epic_nasa, headers=headers, data=payload)
+def create_nasa_epic_requests(url, api_key):
+    payload = {'api_key': api_key}
+    response = requests.get(url_epic_nasa, params=payload)
+    response.raise_for_status()
     return response
 
 
@@ -68,12 +68,11 @@ if __name__ == '__main__':
 
     images_path_nasa = 'images_nasa'
     os.makedirs(images_path_nasa, exist_ok=True)
-    # if not os.path.exists(images_path_nasa):
-    #     os.mkdir(images_path_nasa)
 
-    url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural?api_key=cz0rECf7cwW5n90a51pe01jDNPuPAlgM9Wtp0KWa'
 
-    nasa_epic = create_nasa_epic_requests(url_epic_nasa).json()
+    url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural'
+
+    nasa_epic = create_nasa_epic_requests(url_epic_nasa, api_key_nasa).json()
     for name in nasa_epic:
         image_date = formatting_nasa_epic_date(name)
         image_name = getting_nasa_epic_image(name)
