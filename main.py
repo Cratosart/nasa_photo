@@ -47,6 +47,18 @@ def save_image(url, path_save):
     filename = str(uuid.uuid4())
     urllib.request.urlretrieve(url, f'./{path_save}/{filename}.png')
 
+def spacex_requests(url):
+    payload={}
+    headers = {}
+    response = requests.request("GET", url_spacex, headers=headers, data=payload)
+    return response
+
+def fetch_spacex_last_launch (info):
+    for key, value in info.items():
+        if key == 'flickr_images':
+            for url_image_spacex in value:
+                save_image(url_image_spacex,images_path_nasa)
+
 
 if __name__ == '__main__':
     load_dotenv()
@@ -71,6 +83,12 @@ if __name__ == '__main__':
     parser = createparser()
     namespace = parser.parse_args()
     sleep_time = namespace.time
+
+    url_spacex = 'https://api.spacexdata.com/v3/launches/65'
+    response = spacex_requests(url_spacex)
+    info = response.json()['links']
+    i = fetch_spacex_last_launch(info)
+
 
     path = "./images_nasa"
     for image in listdir(path):
