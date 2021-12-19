@@ -29,13 +29,31 @@ pip install -r requirements.txt
 ```
 API_KEY_NASA=тут доолжен быть API ключ NASA
 API_KEY_TELEGRAM=тут должен быть ключ API telegram
+CHAT_ID_TELEGRAM=@имя_канала_телеграм
 ```
 
 API_KEY_NASA - используется для загружки изображений
 API_KEY_TELEGRAM - используется для отправки сообщений в чат
+CHAT_ID_TELEGRAM - используется для отправки фотографий в конкретный канал
 
 Рекомендуется использовать [virtualenv/venv](https://docs.python.org/3/library/venv.html) для изоляции проекта.
 
 ### Цель проекта
 
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [dvmn.org](https://dvmn.org/).
+
+### Запуск скрипта
+
+Пример файла .env:
+
+```
+API_KEY_NASA=cz0rECf7cwW5n90a51pe01jDNPuPAlgM9Wtp0KWa
+API_KEY_TELEGRAM=5053046789:AAFYgBv0puCAOBY9hTPtYordwbHrhPduZEM
+CHAT_ID_TELEGRAM=@NASA_PHOTO
+```
+
+запуск скрипта:
+
+```
+py main.py 10
+```
