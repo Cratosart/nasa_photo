@@ -17,13 +17,13 @@ from os import listdir
 
 def createparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('time', nargs='?', default=10)
+    parser.add_argument('time', nargs='?', default=86400)
     return parser
 
 
-def create_nasa_epic_requests(url, api_key):
+def create_nasa_epic_request(url, api_key):
     payload = {'api_key': api_key}
-    response = requests.get(url_epic_nasa, params=payload)
+    response = requests.get(url, params=payload)
     response.raise_for_status()
     return response
 
@@ -32,8 +32,8 @@ def format_nasa_epic_date(nasa_epic):
     for key, value in nasa_epic.items():
         if key == "date":
             value = datetime.datetime.fromisoformat(value)
-            date_image = value.strftime('%Y/%m/%d')
-            return date_image
+            image_date = value.strftime('%Y/%m/%d')
+            return image_date
 
 
 def get_nasa_epic_image(nasa_epic):
@@ -49,12 +49,8 @@ def save_image(url, path_save):
 
 
 def fetch_spacex_last_launch(url):
-    payload = {}
-    headers = {}
-    response = requests.request("GET",
-                                url_spacex,
-                                headers=headers,
-                                data=payload)
+    response = requests.get(url)
+    response.raise_for_status()
     info = response.json()['links']
     for key, value in info.items():
         if key == 'flickr_images':
@@ -62,15 +58,28 @@ def fetch_spacex_last_launch(url):
                 save_image(url_image_spacex, images_path_nasa)
 
 
-def get_image_url_nasa(url):
+def get_image_url_nasa(image_name, image_date):
     payload = {'api_key': api_key_nasa}
     response = requests.get(
         f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png',
         params=payload)
-    return response
+    response.raise_for_status()
+    return response.url
 
+
+def save_nasa_image(nasa_epic, image_name,image_date ):
+        format_url_nasa(nasa_epic)
+        url_epic_image_nasa = get_image_url_nasa(image_name, image_date)
+        save_image(url_epic_image_nasa, images_path_nasa)
+
+def format_url_nasa(nasa_epic):
+    for name in nasa_epic:
+        image_date = format_nasa_epic_date(name)
+        image_name = get_nasa_epic_image(name)
+        return image_name, image_date
 
 if __name__ == '__main__':
+
     load_dotenv()
     api_key_nasa = os.environ['API_KEY_NASA']
     api_key_telegram = os.environ['API_KEY_TELEGRAM']
@@ -81,12 +90,9 @@ if __name__ == '__main__':
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural'
 
-    nasa_epic = create_nasa_epic_requests(url_epic_nasa, api_key_nasa)
-    for name in nasa_epic:
-        image_date = format_nasa_epic_date(name)
-        image_name = get_nasa_epic_image(name)
-        url_epic_image_nasa = (get_image_url_nasa).url
-        save_image(url_epic_image_nasa, images_path_nasa)
+    nasa_epic = create_nasa_epic_request(url_epic_nasa, api_key_nasa).json()
+    image_name, image_date = format_url_nasa(nasa_epic)
+    save_nasa_image(nasa_epic, image_name, image_date)
 
     parser = createparser()
     namespace = parser.parse_args()
