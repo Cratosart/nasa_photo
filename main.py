@@ -82,9 +82,11 @@ def format_url_nasa(nasa_epic):
         return image_name, image_date
 
 def fetch_nasa_epic_images(url_epic_nasa, api_key_nasa):
-    nasa_epic = create_nasa_epic_request(url_epic_nasa, api_key_nasa).json()
-    image_name, image_date = format_url_nasa(nasa_epic)
-    save_nasa_image(nasa_epic, image_name, image_date)
+        nasa_epic = create_nasa_epic_request(url_epic_nasa, api_key_nasa).json()
+        for name in nasa_epic:
+            image_date = format_nasa_epic_date(name)
+            image_name = get_nasa_epic_image(name)
+            save_nasa_image(nasa_epic, image_name, image_date)
 
 def fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, path_save):
     payload = {'api_key': api_key_nasa,
@@ -116,7 +118,7 @@ if __name__ == '__main__':
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural'
     url_apod_nasa = 'https://api.nasa.gov/planetary/apod'
-    fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, images_path_nasa)
+    # fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, images_path_nasa)
     fetch_nasa_epic_images(url_epic_nasa, api_key_nasa)
 
     parser = createparser()
@@ -124,7 +126,7 @@ if __name__ == '__main__':
     sleep_time = namespace.time
 
     url_spacex = 'https://api.spacexdata.com/v3/launches/65'
-    fetch_spacex_last_launch(url_spacex)
+    # fetch_spacex_last_launch(url_spacex)
 
     path = "./images_nasa"
     for image in listdir(path):
