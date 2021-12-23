@@ -118,7 +118,7 @@ if __name__ == '__main__':
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural'
     url_apod_nasa = 'https://api.nasa.gov/planetary/apod'
-    # fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, images_path_nasa)
+    fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, images_path_nasa)
     fetch_nasa_epic_images(url_epic_nasa, api_key_nasa)
 
     parser = createparser()
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     sleep_time = namespace.time
 
     url_spacex = 'https://api.spacexdata.com/v3/launches/65'
-    # fetch_spacex_last_launch(url_spacex)
+    fetch_spacex_last_launch(url_spacex)
 
     path = "./images_nasa"
     for image in listdir(path):
