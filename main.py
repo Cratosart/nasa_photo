@@ -8,8 +8,11 @@ import urllib
 import telegram
 import time
 import argparse
+import urllib.parse
 
+from urllib.parse import urlparse
 from os.path import isfile
+from os.path import splitext
 from os.path import join as joinpath
 from dotenv import load_dotenv
 from os import listdir
@@ -17,7 +20,7 @@ from os import listdir
 
 def createparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('time', nargs='?', default=10)
+    parser.add_argument('time', nargs='?', default=86400)
     return parser
 
 
@@ -83,6 +86,24 @@ def fetch_nasa_epic_images(url_epic_nasa, api_key_nasa):
     image_name, image_date = format_url_nasa(nasa_epic)
     save_nasa_image(nasa_epic, image_name, image_date)
 
+def fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, path_save):
+    payload = {'api_key': api_key_nasa,
+               'count': 30}
+    response = requests.get(
+        url_apod_nasa,
+        params=payload)
+    response.raise_for_status()
+    url_list_nasa = response.json()
+    for url in url_list_nasa:
+        for key, value in url.items():
+            if key == 'hdurl':
+                url = urlparse(value)
+                split_url = (splitext(url.path))
+                ext_image = split_url[1]
+                filename = str(uuid.uuid4())
+                urllib.request.urlretrieve(value, f'./{path_save}/{filename}{ext_image}')
+
+
 if __name__ == '__main__':
 
     load_dotenv()
@@ -94,7 +115,8 @@ if __name__ == '__main__':
     os.makedirs(images_path_nasa, exist_ok=True)
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural'
-
+    url_apod_nasa = 'https://api.nasa.gov/planetary/apod'
+    fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, images_path_nasa)
     fetch_nasa_epic_images(url_epic_nasa, api_key_nasa)
 
     parser = createparser()
