@@ -17,7 +17,7 @@ from os import listdir
 
 def createparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('time', nargs='?', default=86400)
+    parser.add_argument('time', nargs='?', default=10)
     return parser
 
 
@@ -78,6 +78,11 @@ def format_url_nasa(nasa_epic):
         image_name = get_nasa_epic_image(name)
         return image_name, image_date
 
+def fetch_nasa_epic_images(url_epic_nasa, api_key_nasa):
+    nasa_epic = create_nasa_epic_request(url_epic_nasa, api_key_nasa).json()
+    image_name, image_date = format_url_nasa(nasa_epic)
+    save_nasa_image(nasa_epic, image_name, image_date)
+
 if __name__ == '__main__':
 
     load_dotenv()
@@ -90,9 +95,7 @@ if __name__ == '__main__':
 
     url_epic_nasa = 'https://api.nasa.gov/EPIC/api/natural'
 
-    nasa_epic = create_nasa_epic_request(url_epic_nasa, api_key_nasa).json()
-    image_name, image_date = format_url_nasa(nasa_epic)
-    save_nasa_image(nasa_epic, image_name, image_date)
+    fetch_nasa_epic_images(url_epic_nasa, api_key_nasa)
 
     parser = createparser()
     namespace = parser.parse_args()
