@@ -20,30 +20,8 @@ from os import listdir
 
 def createparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('time', nargs='?', default=86400)
+    parser.add_argument('time', nargs='?', default=10)
     return parser
-
-
-def create_nasa_epic_request(url, api_key):
-    payload = {'api_key': api_key}
-    response = requests.get(url, params=payload)
-    response.raise_for_status()
-    return response
-
-
-def format_nasa_epic_date(nasa_epic):
-    for key, value in nasa_epic.items():
-        if key == "date":
-            value = datetime.datetime.fromisoformat(value)
-            image_date = value.strftime('%Y/%m/%d')
-            return image_date
-
-
-def get_nasa_epic_image(nasa_epic):
-    for key, value in nasa_epic.items():
-        if key == "image":
-            image_name = value
-            return image_name
 
 
 def save_image(url, path_save):
@@ -70,7 +48,7 @@ def get_image_url_nasa(image_name, image_date):
     return response.url
 
 
-def save_nasa_image(nasa_epic, image_name,image_date ):
+def save_nasa_image(nasa_epic, image_name,image_date):
         format_url_nasa(nasa_epic)
         url_epic_image_nasa = get_image_url_nasa(image_name, image_date)
         save_image(url_epic_image_nasa, images_path_nasa)
@@ -81,11 +59,19 @@ def format_url_nasa(nasa_epic):
         image_name = get_nasa_epic_image(name)
         return image_name, image_date
 
-def fetch_nasa_epic_images(url_epic_nasa, api_key_nasa):
-        nasa_epic = create_nasa_epic_request(url_epic_nasa, api_key_nasa).json()
+def fetch_nasa_epic_images(url, api_key):
+        payload = {'api_key': api_key}
+        response = requests.get(url, params=payload)
+        response.raise_for_status()
+        nasa_epic = response.json()
         for name in nasa_epic:
-            image_date = format_nasa_epic_date(name)
-            image_name = get_nasa_epic_image(name)
+            for key, value in name.items():
+                if key == "date":
+                    value = datetime.datetime.fromisoformat(value)
+                    image_date = value.strftime('%Y/%m/%d')
+            for key, value in name.items():
+                if key == "image":
+                    image_name = value
             save_nasa_image(nasa_epic, image_name, image_date)
 
 def fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, path_save):
@@ -95,8 +81,8 @@ def fetch_nasa_apod_images(url_apod_nasa, api_key_nasa, path_save):
         url_apod_nasa,
         params=payload)
     response.raise_for_status()
-    url_list_nasa = response.json()
-    for url in url_list_nasa:
+    nasa_url = response.json()
+    for url in nasa_url:
         for key, value in url.items():
             if key == 'hdurl':
                 url = urlparse(value)
